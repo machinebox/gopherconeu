@@ -1,9 +1,4 @@
 
-
-
-dataset_test:
-	go test -v -run=TestDataset
-
 dataset: news20.tar.gz
 	tar xvfz news20.tar.gz	
 

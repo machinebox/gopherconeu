@@ -1,4 +1,4 @@
-package news
+package dataset
 
 import (
 	"testing"
@@ -13,7 +13,7 @@ func TestDataset(t *testing.T) {
 	// Y are the expected outputs
 	y := []string{}
 
-	categories, err := ReadDataset("./20_newsgroup", func(body, category string) {
+	categories, err := ReadDataset("../20_newsgroup", func(body, category string) {
 		x = append(x, body)
 		y = append(y, category)
 	})

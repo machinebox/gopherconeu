@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	dataset "github.com/machinebox/gopherconeu"
+	"github.com/machinebox/gopherconeu/dataset"
 
 	tf "github.com/tensorflow/tensorflow/tensorflow/go"
 )

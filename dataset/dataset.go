@@ -1,4 +1,4 @@
-package news
+package dataset
 
 import (
 	"io/ioutil"
