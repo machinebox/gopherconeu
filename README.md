@@ -6,6 +6,9 @@ We will show you how to take advantage of Machine Learning capabilities to power
 Learn about the kinds of problems Machine Learning is good at, and what it cannot do.
 We will explore the core concepts around this mysterious technology, and build a real solution from scratch.
 
+## Slides
+
+https://docs.google.com/presentation/d/10pzku6UfEblhlLIQvOHVA7Rhk4w55ieH67vKKuyEaYc/edit?usp=sharing
 
 # Requirements
 
