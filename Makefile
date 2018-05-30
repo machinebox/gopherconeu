@@ -10,7 +10,8 @@ wordemb: glove.6B.zip
 	
 glove.6B.zip:
 	wget http://nlp.stanford.edu/data/glove.6B.zip
-	
+
+download: dataset wordemb 
 
 install:
 	pip2 install -r keras/requirements.txt
