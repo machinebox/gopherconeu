@@ -13,4 +13,4 @@ glove.6B.zip:
 	
 
 install:
-	pip2 install ./keras/requirements.txt
+	pip2 install -r keras/requirements.txt
