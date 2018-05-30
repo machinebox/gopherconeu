@@ -14,7 +14,13 @@ https://docs.google.com/presentation/d/10pzku6UfEblhlLIQvOHVA7Rhk4w55ieH67vKKuyE
 
 ## Go and some dependencies
 
-Go and you can use `dep` to get the dependencies, or manually `go get` everything
+Go and you can use `dep` to get the dependencies, or manually `go get` everything.
+
+You can install `wget` with Brew:
+
+```
+brew install wget
+```
 
 ## Dataset
 
