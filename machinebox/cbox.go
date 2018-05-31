@@ -59,7 +59,7 @@ func main() {
 	fmt.Printf("Train %v, Validation %v\n", len(train), len(validation))
 
 	fmt.Printf("Training...\n")
-	model.trainMulti(train)
+	model.train(train)
 	fmt.Printf("Finished Training\n")
 
 	fmt.Printf("Validation...\n")
@@ -124,31 +124,6 @@ func (m *Model) train(examples []classificationbox.Example) {
 			fmt.Println("[WARN] Error teaching example", err, ex)
 		}
 		fmt.Printf("\rTeach [%v/%v]", i, len(examples))
-	}
-}
-
-func (m *Model) trainMulti(examples []classificationbox.Example) {
-	fmt.Println("")
-	batch := 0
-	b := []classificationbox.Example{}
-	for i, ex := range examples {
-		batch++
-		b = append(b, ex)
-		if batch > 100 {
-			batch = 0
-			err := m.client.TeachMulti(context.Background(), m.ID, b)
-			if err != nil {
-				fmt.Println("[WARN] Error teaching example", err)
-			}
-			b = []classificationbox.Example{}
-			fmt.Printf("\rTeach [%v/%v]", i, len(examples))
-		}
-	}
-	if batch > 0 {
-		err := m.client.TeachMulti(context.Background(), m.ID, b)
-		if err != nil {
-			fmt.Println("[WARN] Error teaching example", err)
-		}
 	}
 }
 
