@@ -74,6 +74,36 @@ func loadIndex(indexFile string, maxIndex int) (map[string]int32, error) {
 	return index, nil
 }
 
+func invertIndex(index map[string]int32) ([]string, error) {
+	invert := make([]string, len(index))
+	for k, v := range index {
+		// normally the values are 0..len
+		// to make it more robush it should validate that
+		if int(v) >= len(invert) {
+			return invert, errors.New("the index is malformed")
+		}
+		invert[v] = k
+	}
+	return invert, nil
+}
+
+func vectorToLabel(y []float32, labels []string) (string, error) {
+	// get the max, activation, and map to the index
+	max := float32(0.0)
+	idx := 0
+	for i := range y {
+		if y[i] > max {
+			max = y[i]
+			idx = i
+		}
+	}
+	if idx > len(labels) {
+		return "", errors.New("the index for the label is out of bounds")
+	}
+	return labels[idx], nil
+
+}
+
 // function to load label index
 // function to transform a string to a vector
 // function to transform a vector of labels to a label probabilities
@@ -88,6 +118,18 @@ func main() {
 	body := "Computers are good, and Go is awesome"
 
 	vector := bodyToVector(body, wordIndex, maxWords)
+
+	fmt.Printf("vector %+v", vector)
+
+	labelIndex, err := loadIndex("./labels.csv", 0)
+	if err != nil {
+		log.Fatal("can not load the index for labels", err)
+	}
+
+	labels, err := invertIndex(labelIndex)
+	if err != nil {
+		log.Fatal("can not load the invert the index for labels", err)
+	}
 
 	// load the model with the name and the tags
 	model, err := tf.LoadSavedModel("newsmodelkeras", []string{"newsmodelkerasTag"}, nil)
@@ -131,6 +173,14 @@ func main() {
 
 	y := result[0].Value().([][]float32)
 
+	category, err := vectorToLabel(y[0], labels)
+	if err != nil {
+		log.Fatal("can not transform the output", err)
+		return
+	}
+
 	fmt.Println("Result: ", y)
+
+	fmt.Println("Category: ", category)
 
 }
