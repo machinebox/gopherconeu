@@ -1,8 +1,14 @@
 package main
 
 import (
+	"encoding/csv"
+	"errors"
 	"fmt"
+	"io"
 	"log"
+	"os"
+	"strconv"
+	"strings"
 
 	"github.com/machinebox/gopherconeu/dataset"
 
@@ -15,6 +21,59 @@ const (
 )
 
 // function to load the word index
+
+// bodyToVector translates a text body into a vector.
+func bodyToVector(body string, wordIndex map[string]int32, dim int) []int32 {
+	words := strings.Fields(body)
+	vector := make([]int32, dim)
+	//vector := [1000]int32{}
+	if len(words) > dim {
+		words = words[:dim]
+	}
+	offset := dim - len(words)
+	for pos, w := range words {
+		idx, ok := wordIndex[strings.ToLower(w)]
+		if !ok {
+			continue
+		}
+		vector[pos+offset] = int32(idx)
+	}
+	return vector
+}
+
+func loadIndex(indexFile string, maxIndex int) (map[string]int32, error) {
+	index := map[string]int32{}
+	file, err := os.Open(indexFile)
+	if err != nil {
+		return index, err
+	}
+	defer file.Close()
+
+	r := csv.NewReader(file)
+	r.Comma = ';'
+	for {
+		record, err := r.Read()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return index, err
+		}
+		if len(record) != 2 {
+			return index, errors.New("column mismatch on the index")
+		}
+		i, err := strconv.Atoi(record[1])
+		if err != nil {
+			return index, err
+		}
+		if maxIndex != 0 && i >= maxIndex {
+			continue
+		}
+		index[record[0]] = int32(i)
+	}
+	return index, nil
+}
+
 // function to load label index
 // function to transform a string to a vector
 // function to transform a vector of labels to a label probabilities
