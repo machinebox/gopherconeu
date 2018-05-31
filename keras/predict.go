@@ -80,6 +80,15 @@ func loadIndex(indexFile string, maxIndex int) (map[string]int32, error) {
 
 func main() {
 
+	wordIndex, err := loadIndex("./words.csv", maxlen)
+	if err != nil {
+		log.Fatal("can not load the index", err)
+	}
+
+	body := "Computers are good, and Go is awesome"
+
+	vector := bodyToVector(body, wordIndex, maxWords)
+
 	// load the model with the name and the tags
 	model, err := tf.LoadSavedModel("newsmodelkeras", []string{"newsmodelkerasTag"}, nil)
 
@@ -98,7 +107,7 @@ func main() {
 	}
 
 	// dummy input
-	x := []int32{0, 1, 0, 1}
+	x := vector
 
 	tensor, _ := tf.NewTensor([1][]int32{0: x})
 
